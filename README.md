@@ -414,7 +414,6 @@ Observed service:
 ```text
 traefik   LoadBalancer   10.43.231.71   130.239.48.225   80:31210/TCP,443:32685/TCP
 ```
-
 From these outputs we see that Traefik is available on the cluster node and can route HTTP traffic through Ingress.
 So below we will create manifest to use Ingress.
 ---
