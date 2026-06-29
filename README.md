@@ -15,7 +15,7 @@ The solution covers the main assignment requirements:
 * Expose the application through Traefik Ingress.
 
 
-The experiment was implemented on an `k3s Kubernetes cluster`.
+The experiment was implemented on a `k3s Kubernetes cluster`.
 
 ---
 
@@ -23,7 +23,7 @@ The experiment was implemented on an `k3s Kubernetes cluster`.
 
 ### Kubernetes Cluster
 
-The application was deployed to an existing k3s cluster with the detail as below:
+The application was deployed to a k3s cluster with the detail as below:
 
 ```bash
 kubectl get nodes -o wide
@@ -157,7 +157,7 @@ CMD ["npm", "start"]
 
 ### .dockerignore
 The `.dockerignore` file prevents unnecessary local files from being copied into the container image.
-Its content as:
+Its content is:
 ```dockerignore
 node_modules
 npm-debug.log
@@ -415,7 +415,7 @@ Observed service:
 traefik   LoadBalancer   10.43.231.71   130.239.48.225   80:31210/TCP,443:32685/TCP
 ```
 The outputs show that Traefik is available on our cluster and can route HTTP traffic through Ingress.
-So below we will create manifest to use Ingress.
+So we create the following manifest configures Ingress for the application.
 
 ---
 
@@ -528,7 +528,7 @@ However, in this environment, direct access from the laptop to `130.239.48.225:8
 ```text
 connect to 130.239.48.225 port 80 failed: Connection timed out
 ```
-Direct access to the NodePort `30080` was also blocked externally. The reason is due to network restrictions on the university server where the cluster is hosted. So we use SSH tunnel to get through as below.
+Direct access to the NodePort `30080` was also blocked externally. The reason is due to network restrictions on the university server where the cluster is hosted. So we use SSH tunnel as a workaround for browser-based access, as presented below.
 
 ---
 
@@ -540,7 +540,7 @@ On the laptop:
 ```bash
 ssh -L 8080:127.0.0.1:80 chanh@130.239.48.225
 ```
-We make sure that the tunnel is kept opening
+We make sure that the SSH session is kept opening while testing from the browser.
 
 Then either test with curl:
 
@@ -738,7 +738,7 @@ The output confirms that the 3 application replicas are distributed across the t
 * `p08`
 * `p09`
 
-which showing an improvement on availability compared with running the application on a single server.
+which shows an improvement on availability compared with running the application on a single server.
 
 ---
 
@@ -813,7 +813,7 @@ kubectl get deployment node-hostname -n node-hostname \
   -o jsonpath='{.spec.template.spec.containers[0].image}'; echo
 ```
 
-Expected final image:
+Output now is:
 
 ```text
 docker.io/chanh/node-hostname:0.2.1
@@ -963,7 +963,7 @@ This removes the Deployment, Service, Ingress, and Pods in the namespace.
 * Application containerized with Docker.
 * Docker image pushed to Docker Hub.
 * Application deployed to Kubernetes.
-* Application exposed internally through a Kubernetes Service.
+* Application exposed through a Kubernetes Service using NodePort.
 * Application exposed through Traefik Ingress.
 * Application tested successfully from the cluster node.
 * Browser access demonstrated through SSH tunnel due to external firewall restrictions.
@@ -979,18 +979,12 @@ This solution was intentionally kept small and suitable for a time-boxed technic
 
 ### 14.1 HTTPS
 
-For production, expose the application through HTTPS.
-
-We may setup:
+For production, expose the application through HTTPS, which would require:
 
 * Real DNS name
 * Traefik Ingress
 * cert-manager
 * Let's Encrypt certificate
-
-Example target URL:
-
-
 
 ---
 
@@ -1029,7 +1023,7 @@ also for production, use a private registry with access control, for example:
 
 ### 14.4 Autoscaling
 
-More important, we can utilize Horizontal Pod Autoscaler of Kubernetes:
+More importantly, we can utilize the Kubernetes Horizontal Pod Autoscaler:
 
 * Scale based on CPU and memory.
 * Potentially scale based on request rate or custom metrics.
@@ -1048,7 +1042,7 @@ kubectl autoscale deployment node-hostname \
 
 ### 14.5 Observability
 
-And of course, one of the important and useful aspect of cloud-native ops is observability:
+And of course, one important useful aspect of cloud-native ops is observability:
 
 * Structured logging
 * Metrics
