@@ -528,9 +528,8 @@ However, in this environment, direct access from the laptop to `130.239.48.225:8
 ```text
 connect to 130.239.48.225 port 80 failed: Connection timed out
 ```
+Direct access to the NodePort `30080` was also blocked externally. The reason is due to network restrictions on the university server where the cluster is hosted. So we use SSH tunnel to get through as below.
 
-Similarly, direct access to the NodePort `30080` was also blocked externally.
-The reason is due to network restrictions on the university server where the cluster is hosted. So we use SSH tunnel to get through as below.
 ---
 
 ### 9.2 Browser Access Through SSH Tunnel
